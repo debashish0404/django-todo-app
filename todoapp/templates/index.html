@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+        body {font-family: Arial; background:#eee;}
+        .container {width:500px; margin:auto; margin-top:50px;}
+        .card {
+            background:white; padding:20px;
+            border-radius:10px;
+            box-shadow:0 0 10px gray;
+        }
+        input, textarea, select {
+            width:100%; padding:8px; margin:10px 0;
+        }
+        button {
+            width:100%; padding:10px;
+            background:green; color:white;
+        }
+        .task {
+            background:#fafafa;
+            margin-top:10px;
+            padding:10px;
+            border-radius:5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h2>Welcome, {{ request.user.username }}</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add Task</button>
+        </form>
+
+        <hr>
+
+        {% for task in tasks %}
+            <div class="task">
+                <b>{{ task.title }}</b>
+                <p>{{ task.description }}</p>
+                <small>{{ task.due_date }} | {{ task.priority }}</small>
+                <br>
+                <a href="{% url 'delete_task' task.id %}">Delete</a>
+            </div>
+        {% empty %}
+            <p>No tasks yet</p>
+        {% endfor %}
+
+        <br>
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
+</div>
+
+</body>
+</html>
